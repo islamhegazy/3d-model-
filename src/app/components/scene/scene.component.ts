@@ -1,5 +1,5 @@
 import { EngineService } from './../../engine.service';
-import { Component, AfterViewInit, ViewChild, ElementRef, HostListener, NgZone, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, OnInit } from '@angular/core';
 //import file from '../../../assets/body/skineBlack'
 
 @Component({
@@ -22,16 +22,25 @@ export class SceneComponent implements OnInit, AfterViewInit {
     this.engServ.createLight();
     this.engServ.animate();
     this.engServ.addControls();
-    this.engServ.loadModel('assets/body/body.gltf');
-    this.engServ.loadModel('assets/body/man_hair_black.gltf');
-    this.engServ.loadModel('assets/body/eays.gltf');
-    this.engServ.loadModel('assets/accessories/black-shoes.gltf');
-    this.engServ.loadModel('assets/accessories/tshirt.gltf');
-    this.engServ.loadModel('assets/accessories/man_trouser_blue.gltf');
+
+    // this.engServ.loadModel('assets/body/man/body.gltf');
+    // this.engServ.loadModel('assets/body/man/man_hair_black.gltf');
+    // this.engServ.loadModel('assets/body/man/eays.gltf');
+
+    // this.engServ.loadModel('assets/accessories/man/shoes/black-shoes.gltf');
+    // this.engServ.loadModel('assets/accessories/man/tshirt/tshirt.gltf');
+    // this.engServ.loadModel('assets/accessories/man/trouser/man_trouser_blue.gltf');
+
+    this.engServ.loadModel('assets/body/women/women-body.gltf');
+    this.engServ.loadModel('assets/body/women/wHair.gltf');
+    this.engServ.loadModel('assets/body/women/weays.gltf');
+    this.engServ.loadModel('assets/accessories/women/shoes/Wshoes.glb');
+    this.engServ.loadModel('assets/accessories/women/wshirt/wshirt.gltf');
+
     this.engServ.render()
   }
   change() {
-    this.engServ.loadSkin('skinBlack');
+    this.engServ.loadSkin([], [], 1);
     this.engServ.render()
   }
 

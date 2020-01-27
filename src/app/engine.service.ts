@@ -8,6 +8,46 @@ import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 })
 export class EngineService implements OnDestroy {
 
+    skinWomen = {
+        skinWhite: {
+            images: [
+                "assets/body/women/skinWhite/women_face_white.jpg",
+                "assets/body/women/skinWhite/women_west_white.jpg",
+                "assets/body/women/skinWhite/women_leg_white.jpg",
+            ],
+            children: [
+                "body.005_1",
+                "body.005_0",
+                "body.005_2"
+            ]
+
+        },
+        skinBlack: {
+            images: [
+                "assets/body/women/skinBlack/women_face_black.jpg",
+                "assets/body/women/skinBlack/women_west_black.jpg",
+                "assets/body/women/skinBlack/women_leg_black.jpg",
+            ],
+            children: [
+                "body.005_1",
+                "body.005_0",
+                "body.005_2"
+            ]
+        }
+    };
+
+    tshirtsWomen= {
+        style1:{
+            images:[
+                "assets/accessories/man/trouser/Polyester_Viscose_Mens_Trouser.jpg"
+            ],
+            children:[
+
+            ]
+        }
+         
+       
+    }
     private canvas: HTMLCanvasElement;
     private renderer: THREE.WebGLRenderer;
     private camera: THREE.PerspectiveCamera;
@@ -140,12 +180,18 @@ export class EngineService implements OnDestroy {
             // for (let object of this.INITIAL_MAP_BODy) {
             //   this.initColor(this.model, object.childID, object.mtl);
             // }
-            this.scene.add(this.model);
-            this.loadSkin('skinWhite');
-            this.loadAccessories('assets/body/man_hair_black.png', 'man_hair_blac', 0);
-            this.loadAccessories(['assets/accessories/Polyester_Viscose_Mens_Trouser.jpg'], ["trouser_0", "trouser_1", "trouser_2", "trouser_3"], 2)
-            this.loadAccessories(['assets/accessories/teal-fabric-texture.jpg', "assets/accessories/Marvelous Desinger_emblem.png"], ["tshirt_0", "tshirt_1"], 1)
-            this.loadAccessories('assets/accessories/running_shoes_c_4952.jpg', 'shoes', 1)
+            //this.scene.add(this.model);
+            // this.loadSkin('skinWhite');
+            // this.loadOthers('assets/body/man/man_hair_black.png', 'man_hair_blac', 0);
+            // this.loadOthers(['assets/accessories/man/trouser/Polyester_Viscose_Mens_Trouser.jpg'], ["trouser_0", "trouser_1", "trouser_2", "trouser_3"], 2)
+            // this.loadOthers(['assets/accessories/man/tshirt/Jersey_garay.jpg', "assets/accessories/man/tshirt/Marvelous Desinger_emblem.png"], ["tshirt_0", "tshirt_1"], 1)
+            // this.loadOthers('assets/accessories/man/shoes/running_shoes_c_4952.jpg', 'shoes', 1)
+            /*women */
+            this.loadSkin(this.skinWomen.skinWhite.images, this.skinWomen.skinWhite.children, 1);
+            this.loadSkin(this.skinWomen.skinBlack.images, this.skinWomen.skinBlack.children, 1);
+            this.loadOthers(['assets/accessories/man/tshirt/Jersey_garay.jpg', "assets/accessories/man/tshirt/Marvelous Desinger_emblem.png"], ["tshirt_0", "tshirt_1"], 1)
+
+            this.loadOthers('assets/body/women/man_hair_black.png', 'wHair', 2);
             this.model.traverse((o) => {
                 if (o instanceof THREE.Mesh) {
                     //console.log(o.material)
@@ -159,34 +205,36 @@ export class EngineService implements OnDestroy {
 
     };
 
-    loadSkin(skinType) {
+    loadSkin(image, names, textureRepeat) {
         //skinTextures is loaded from server via skinUrl
-        let skinTextures = ["face.jpg", "west.jpg", "leg.jpg"];
-        let textureLoader = new THREE.TextureLoader()
-        let face = textureLoader.load("assets/body/" + skinType + "/" + skinTextures[0]);
-        let west = textureLoader.load("assets/body/" + skinType + "/" + skinTextures[1]);
-        let leg = textureLoader.load("assets/body/" + skinType + "/" + skinTextures[2]);
-        face.flipY = west.flipY = leg.flipY = false;
-        let faceMatreial = new THREE.MeshPhongMaterial({ map: face });
-        let westMatreial = new THREE.MeshPhongMaterial({ map: west });
-        let legMatreial = new THREE.MeshPhongMaterial({ map: leg });
-        faceMatreial.map.minFilter = westMatreial.map.minFilter = legMatreial.map.minFilter = THREE.LinearFilter;
-
-        this.scene.traverse((o) => {
-            if (o instanceof THREE.Mesh) {
-                if (o.name === "body.001_2") {
-                    o.material = faceMatreial;
-                } else if (o.name === "body.001_1") {
-                    o.material = westMatreial;
-                } else if (o.name === "body.001_0") {
-                    o.material = legMatreial
-                }
-            }
-        });
+        let textureLoader = new THREE.TextureLoader();
+        let texture;
+        let textureMTL;
+        if (Array.isArray(image)) {
+            image.forEach((element, index) => {
+                texture = textureLoader.load(element);
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.x = textureRepeat;
+                texture.repeat.y = textureRepeat;
+                texture.flipY = false;
+                textureMTL = new THREE.MeshPhongMaterial({
+                    map: texture, color: 0xffffff,
+                    skinning: true,
+                });
+                this.scene.traverse((o) => {
+                    if (o instanceof THREE.Mesh) {
+                        if (o.name === names[index]) {
+                            o.material = textureMTL;
+                        }
+                    }
+                });
+            });
+        }
+        textureMTL.map.minFilter = THREE.LinearFilter;
 
     };
 
-    loadAccessories(image, names, textureRepeat) {
+    loadOthers(image, names, textureRepeat) {
         let textureLoaderM = new THREE.TextureLoader()
         let textureM;
         let textureMTLM;
@@ -211,6 +259,7 @@ export class EngineService implements OnDestroy {
                     }
                 });
             });
+            textureMTLM.map.minFilter = THREE.LinearFilter;
 
         } else {
             textureM = textureLoaderM.load(image);
@@ -222,7 +271,6 @@ export class EngineService implements OnDestroy {
                 map: textureM, color: 0xffffff,
                 skinning: true,
             });
-            textureMTLM.map.minFilter = THREE.LinearFilter;
             this.scene.traverse((o) => {
                 if (o instanceof THREE.Mesh) {
                     if (o.name === names) {
@@ -230,6 +278,7 @@ export class EngineService implements OnDestroy {
                     }
                 }
             });
+            textureMTLM.map.minFilter = THREE.LinearFilter;
         }
 
     }
