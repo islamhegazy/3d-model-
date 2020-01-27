@@ -1,4 +1,13 @@
-<div class="engine-wrapper">
-  <canvas #rendererCanvas id="renderCanvas"></canvas>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <button (click)="change()">change</button>
+        </div>
+        <div class="col-sm-9">
+            <div class="engine-wrapper">
+                <canvas #rendererCanvas id="renderCanvas"></canvas>
+            </div>
+        </div>
+
+    </div>
 </div>
-<button (click)="change()">change</button>
