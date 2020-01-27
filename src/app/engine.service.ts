@@ -36,7 +36,7 @@ export class EngineService implements OnDestroy {
             alpha: true,    // transparent background
             antialias: true // smooth edges
         });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
         this.renderer.setPixelRatio(devicePixelRatio);
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -47,7 +47,7 @@ export class EngineService implements OnDestroy {
     createScene(): void {
         // create the scene
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xffffff)
+        this.scene.background = new THREE.Color(0xddddddd)
     }
 
     createCamera() {
