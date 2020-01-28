@@ -8,6 +8,7 @@ import { MainComponent } from './components/main/main.component';
 import { FemaleComponent } from './components/female/female.component';
 import { FemaleKidComponent } from './components/female-kid/female-kid.component';
 import { MaleKidComponent } from './components/male-kid/male-kid.component';
+import { CharacterFormComponent } from './components/character-form/character-form.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { MaleKidComponent } from './components/male-kid/male-kid.component';
     MainComponent,
     FemaleComponent,
     FemaleKidComponent,
-    MaleKidComponent
+    MaleKidComponent,
+    CharacterFormComponent
   ],
   imports: [
     BrowserModule,
