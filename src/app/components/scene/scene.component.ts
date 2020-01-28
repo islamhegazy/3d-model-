@@ -13,7 +13,13 @@ export class SceneComponent implements OnInit, AfterViewInit {
 
 
   constructor(private engServ: EngineService) { }
-
+  fun() {
+    this.engServ.loadSkin('skinWhite');
+    this.engServ.loadAccessories('assets/body/man_hair_black.png', 'man_hair_blac', 0);
+    this.engServ.loadAccessories(['assets/accessories/Polyester_Viscose_Mens_Trouser.jpg'], ["trouser_0", "trouser_1", "trouser_2", "trouser_3"], 2)
+    this.engServ.loadAccessories(['assets/accessories/teal-fabric-texture.jpg', "assets/accessories/Marvelous Desinger_emblem.png"], ["tshirt_0", "tshirt_1"], 1)
+    this.engServ.loadAccessories('assets/accessories/running_shoes_c_4952.jpg', 'shoes', 1)
+  }
   ngOnInit() {
     this.engServ.getCanvas(this.rendererCanvas);
     this.engServ.createRenderer();
@@ -38,5 +44,15 @@ export class SceneComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
+
+    let x = this.engServ.getEventEmitter()
+    x.subscribe(event => {
+      console.log("event", event)
+      this.fun()
+    })
+
+
+
+
   }
 }

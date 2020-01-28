@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
+import { Injectable, ElementRef, OnDestroy, NgZone, Output, EventEmitter } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +16,7 @@ export class EngineService implements OnDestroy {
     private model: THREE.Object3D;
     private frameId: number = null;
     private controls;
+    event: EventEmitter<any> = new EventEmitter()
 
     constructor(private ngZone: NgZone) { }
 
@@ -141,11 +142,9 @@ export class EngineService implements OnDestroy {
             //   this.initColor(this.model, object.childID, object.mtl);
             // }
             this.scene.add(this.model);
-            this.loadSkin('skinWhite');
-            this.loadAccessories('assets/body/man_hair_black.png', 'man_hair_blac', 0);
-            this.loadAccessories(['assets/accessories/Polyester_Viscose_Mens_Trouser.jpg'], ["trouser_0", "trouser_1", "trouser_2", "trouser_3"], 2)
-            this.loadAccessories(['assets/accessories/teal-fabric-texture.jpg', "assets/accessories/Marvelous Desinger_emblem.png"], ["tshirt_0", "tshirt_1"], 1)
-            this.loadAccessories('assets/accessories/running_shoes_c_4952.jpg', 'shoes', 1)
+            this.emitLoadedEvent();
+
+
             this.model.traverse((o) => {
                 if (o instanceof THREE.Mesh) {
                     //console.log(o.material)
@@ -232,6 +231,16 @@ export class EngineService implements OnDestroy {
             });
         }
 
+    }
+
+    emitLoadedEvent() {
+        this.event.emit(true)
+        console.log("eventfires")
+    }
+    getEventEmitter() {
+
+        console.log("emitter returned")
+        return this.event
     }
 
 }
